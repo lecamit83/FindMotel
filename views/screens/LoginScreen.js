@@ -10,6 +10,7 @@ import {
   Text,
   TouchableOpacity
 } from "react-native";
+import { LoginButton, AccessToken, LoginManager } from "react-native-fbsdk";
 import * as Animatable from "react-native-animatable";
 import Icon from "react-native-vector-icons/FontAwesome";
 import Button from "../components/Button";
@@ -67,31 +68,43 @@ class LoginScreen extends Component {
             </TouchableOpacity>
           </View>
           <View style={styles.wrapLine}>
-            <View style={styles.line}/>
+            <View style={styles.line} />
             <View>
               <Text style={styles.text}>Hoặc</Text>
             </View>
-            <View style={styles.line}/>
+            <View style={styles.line} />
           </View>
           <Button
             title="Đăng nhập bằng Facebook"
             nameIcon="facebook"
-            onPress={() => console.log("AA")}
+            onPress={() => this._authentificatinWithFacebook()}
           />
         </Animatable.View>
       </View>
     );
   }
+  _authentificatinWithFacebook() {
+    LoginManager.logInWithReadPermissions(["public_profile"]).then(result => {
+      if (result.isCancelled) {
+        alert("Login cancelled");
+      } else {
+        alert(
+          "Login success with permissions: " +
+            result.grantedPermissions.toString()
+        );
+      }
+    }, error => alert('Login fail with error: ' + error));
+  }
   componentDidMount() {
     const iconLogo = Animated.timing(this.state.animateVertical, {
       toValue: -SCREEN_HEIGHT / 2,
       duration: 3000,
-      easing : Easing.exp
+      easing: Easing.exp
     });
     const form = Animated.timing(this.state.animatedOpacityForm, {
       toValue: 1,
       duration: 1000,
-      easing : Easing.exp
+      easing: Easing.exp
     });
     Animated.sequence([iconLogo, form]).start();
   }
@@ -156,19 +169,19 @@ const styles = StyleSheet.create({
     padding: 8,
     flexDirection: "row",
     justifyContent: "space-between",
-    alignItems: 'center',
+    alignItems: "center",
     width: SCREEN_WIDTH - 32
   },
-  wrapLine : {
+  wrapLine: {
     paddingVertical: 30,
     flexDirection: "row",
     justifyContent: "space-between",
-    alignItems: 'center',
+    alignItems: "center"
   },
-  line : {
-    height : 1,
+  line: {
+    height: 1,
     backgroundColor: "white",
-    width : SCREEN_WIDTH * 4 / 10,
+    width: (SCREEN_WIDTH * 4) / 10
   }
 });
 
