@@ -7,13 +7,13 @@
 import React, { Component } from "react";
 import { Platform, StyleSheet, Text, View, SafeAreaView } from "react-native";
 
-import Splash from "./views/screens/Splash";
+import LoginScreen from "./views/screens/LoginScreen";
 
 export default class App extends Component {
   render() {
     return (
       <SafeAreaView style={styles.container}>
-        <Splash />
+        <LoginScreen />
       </SafeAreaView>
     );
   }
