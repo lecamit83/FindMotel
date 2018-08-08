@@ -15,8 +15,6 @@ class Button extends Component {
     super(props);
   }
   render() {
-    console.log(this.props);
-
     const { title, nameIcon, onPress } = this.props;
     return (
       <TouchableOpacity onPress={onPress}>

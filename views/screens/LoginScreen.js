@@ -10,7 +10,7 @@ import {
   Text,
   TouchableOpacity
 } from "react-native";
-import { LoginButton, AccessToken, LoginManager } from "react-native-fbsdk";
+import { LoginButton, AccessToken, LoginManager, GraphRequest, GraphRequestManager } from "react-native-fbsdk";
 import * as Animatable from "react-native-animatable";
 import Icon from "react-native-vector-icons/FontAwesome";
 import Button from "../components/Button";
@@ -84,16 +84,41 @@ class LoginScreen extends Component {
     );
   }
   _authentificatinWithFacebook() {
-    LoginManager.logInWithReadPermissions(["public_profile"]).then(result => {
-      if (result.isCancelled) {
-        alert("Login cancelled");
-      } else {
-        alert(
-          "Login success with permissions: " +
-            result.grantedPermissions.toString()
-        );
-      }
-    }, error => alert('Login fail with error: ' + error));
+    LoginManager.logInWithReadPermissions(["public_profile"]).then(
+      result => {
+        if (result.isCancelled) {
+          alert("Login cancelled");
+        } else {
+          AccessToken.getCurrentAccessToken().then(data => {
+            const { accessToken } = data;
+
+            const responseInfoCallback = (error, result) => {
+              if (error) {
+                console.log(error)
+                alert('Error fetching data: ' + error.toString());
+              } else {
+                console.log(result)
+                alert('Success fetching data: ' + result.toString());
+              }
+            }
+            const infoRequest = new GraphRequest(
+              '/me',
+              {
+                accessToken: accessToken,
+                parameters: {
+                  fields: {
+                    string: 'email,name,first_name,middle_name,last_name'
+                  }
+                }
+              },
+              responseInfoCallback
+            );
+            new GraphRequestManager().addRequest(infoRequest).start();
+          });
+        }
+      },
+      error => alert("Login fail with error: " + error)
+    );
   }
   componentDidMount() {
     const iconLogo = Animated.timing(this.state.animateVertical, {
