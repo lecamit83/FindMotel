@@ -17,7 +17,7 @@ import Button from "../components/Button";
 const SCREEN_WIDTH = Dimensions.get("window").width;
 const SCREEN_HEIGHT = Dimensions.get("window").height;
 
-class Splash extends Component {
+class LoginScreen extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -173,4 +173,4 @@ const styles = StyleSheet.create({
 });
 
 //make this component available to the app
-export default Splash;
+export default LoginScreen;
